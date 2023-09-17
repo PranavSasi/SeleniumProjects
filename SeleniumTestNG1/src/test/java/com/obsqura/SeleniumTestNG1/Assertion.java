@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class Assertion extends Base {
 	
@@ -20,8 +21,10 @@ public class Assertion extends Base {
 			showMessageButton.click();
 			WebElement yourMessage = driver.findElement(By.xpath("//div[@id='message-one']"));
 			String actualMessage = yourMessage.getText();
-			Assert.assertEquals(expectedOutput,actualMessage,"Your message is "+expectedOutput);
+			Assert.assertEquals(expectedOutput,actualMessage,"Your message is not"+ expectedOutput);
 	}
+
+	@Test
 	public void radioButton() {
 		driver.navigate().to("https://selenium.obsqurazone.com/radio-button-demo.php");
 		WebElement maleRadioButton =driver.findElement(By.xpath("//input[@id='inlineRadio11']"));
@@ -29,6 +32,7 @@ public class Assertion extends Base {
 		boolean isMaleRadioButtonSelected = maleRadioButton.isSelected();
 		assertTrue(isMaleRadioButtonSelected,"Male button is not selected");
 	}
+
 	@Test
 	public void verifyMaleRadioButtonDisabled() {
 		driver.navigate().to("https://selenium.obsqurazone.com/radio-button-demo.php");
@@ -45,19 +49,40 @@ public class Assertion extends Base {
 		String b= "CDE";
 		Assert.assertNotEquals(a,b,"a and b are same");
 	}
+	
 	@Test
 	public void assertNullSample() {
 		String a=null;
 		Assert.assertNull(a,"a is not null");
 		}
+	
 	@Test
-	public void hardAssert() {
+	public void  assertNotNullSample(){
+		String  a="ABC";
+		Assert.assertNotNull(a,"A is Null");	
+	}
+	
+	@Test
+	public void softAssert() {
 		String expectedBackGroundColor="rgba(0, 123, 255, 1)";
-		String expectedMessage = "Show Message";
+		String expectedMessage = "Show Message1";
+		SoftAssert softAssert = new SoftAssert();
+		
 		WebElement showMessageButton =driver.findElement(By.xpath("//button[@id='button-one']"));
 		String showMessageButtonBackgroundColor = showMessageButton.getCssValue("background-color"); 
 		String actualMessage= showMessageButton.getText();
-		Assert.assertEquals(expectedMessage,actualMessage,"The text is not Show Message");
-		Assert.assertEquals(expectedBackGroundColor,showMessageButtonBackgroundColor,"The background color is not blue" );
+		softAssert.assertEquals(expectedMessage,actualMessage,"The text is not Show Message");
+		softAssert.assertEquals(expectedBackGroundColor,showMessageButtonBackgroundColor,"The background color is not blue" );
+		softAssert.assertAll();
 		}	
+	
+	@Test
+	public void verifyShowButtontext() {
+		WebElement showMessageButton=driver.findElement(By.xpath("//button[@id='button-one']"));
+		String exceptedMessage="Show Message buttons";
+		String actualMessage=showMessageButton.getText();
+		Assert.assertNotEquals(exceptedMessage,actualMessage,"The text is not equal");
+	}
+	
 }
+	
